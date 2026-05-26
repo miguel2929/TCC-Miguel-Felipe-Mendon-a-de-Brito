@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IF - Estágios</title>
+    <style>
+        :root {
+            --primary: #1f8a70;
+            --primary-dark: #166351;
+            --bg: #f0f2f5;
+            --white: #ffffff;
+            --text: #333;
+            --gray: #666;
+            --accent: #00d2ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
+        body { background: var(--bg); height: 100vh; overflow: hidden; color: var(--text); }
+
+        /* LOGIN */
+        .login-container { 
+            display: flex; 
+            height: 100vh; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .left { 
+            width: 55%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 40px;
+            text-align: center;
+        }
+
+        .left h1 { 
+            color: var(--primary); 
+            font-size: 64px; 
+            font-weight: 800; 
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 15px;
+        }
+
+        .left p { 
+            color: var(--gray); 
+            font-size: 18px; 
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        .right { 
+            width: 45%; 
+            background: linear-gradient(135deg, #1f8a70 0%, #3aa68f 100%); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative;
+            overflow: hidden;
+        }
+
+        .right::before {
+            content: '';
+            position: absolute;
+            width: 300px; height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            top: -50px; right: -50px;
+        }
+
+        .login-box { 
+            width: 400px; 
+            padding: 40px; 
+            background: rgba(255, 255, 255, 0.15); 
+            border-radius: 24px; 
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px);
+            text-align: center; 
+            color: white; 
+            border: 1px solid rgba(255,255,255,0.3); 
+            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .login-box h2 { 
+            margin-bottom: 25px; 
+            font-weight: 600; 
+            font-size: 24px;
+            letter-spacing: 1px;
+            color: #F8F8FF; 
+        }
+
+        .login-box input { 
+            width: 100%; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 12px; 
+            border: none; 
+            outline: none; 
+            background: rgba(255,255,255,0.9);
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .login-box input:focus {
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.2);
+        }
+
+        .login-box button { 
+            width: 100%; 
+            padding: 15px; 
+            border: none; 
+            border-radius: 12px; 
+            background: var(--white); 
+            color: var(--primary); 
+            font-weight: 700; 
+            font-size: 16px;
+            cursor: pointer; 
+            transition: 0.3s; 
+            margin-top: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .login-box button:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+        }
+
+        .login-box a { 
+            display: block; 
+            margin-top: 20px; 
+            color: rgba(255,255,255,0.9); 
+            cursor: pointer; 
+            font-size: 14px; 
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .login-box a:hover { color: #fff; text-decoration: underline; }
+
+        /* SISTEMA */
+        .sistema { display: none; height: 100vh; overflow-y: auto; padding: 40px 20px; }
+        .tela { display: none; max-width: 1200px; margin: auto; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #ddd; padding-bottom: 15px; }
+        h2 { color: var(--primary); font-size: 28px; }
+
+        /* GRID DE CARDS */
+        #listaVagas, #listaDashboard { display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; }
+
+        .card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border-top: 6px solid var(--primary);
+            width: calc(33.333% - 14px);
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .card h3 { color: var(--primary); margin-bottom: 15px; font-size: 20px; }
+        .card p { font-size: 14px; color: var(--gray); line-height: 1.8; margin-bottom: 5px; }
+
+        .btn-main { padding: 10px 20px; border: none; border-radius: 6px; background: var(--primary); color: white; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .btn-main:hover { background: var(--primary-dark); }
+        
+        .card button { margin-top: 20px; padding: 10px; border-radius: 6px; border: 1px solid var(--primary); background: transparent; color: var(--primary); font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .card button:hover { background: var(--primary); color: white; }
+
+        @media (max-width: 900px) { .card { width: calc(50% - 10px); } .left { display: none; } .right { width: 100%; } }
+        @media (max-width: 600px) { .card { width: 100%; } }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container" id="loginScreen">
+    <div class="left">
+        <h1>IF ESTÁGIOS</h1>
+        <p>A ponte entre o seu conhecimento acadêmico e as melhores oportunidades do mercado.</p>
+    </div>
+    <div class="right">
+        <div class="login-box" id="boxLogin">
+            <h2>LOGIN</h2>
+            <input type="email" id="emailLogin" placeholder="Seu e-mail">
+            <input type="password" id="senhaLogin" placeholder="Sua senha">
+            <button onclick="fazerLogin()">ENTRAR</button>
+            <a onclick="mostrarBox('recuperar')">Esqueci minha senha</a>
+            <div style="margin-top:20px; font-size: 13px; color: rgba(255,255,255,0.7)">Não tem conta?</div>
+            <a onclick="mostrarCadastro('aluno')" style="margin-top:5px; font-weight: 600;">Cadastrar como Aluno</a>
+            <a onclick="mostrarCadastro('empresa')" style="margin-top:5px; font-weight: 600;">Cadastrar como Empresa</a>
+        </div>
+
+        <div class="login-box" id="boxRecuperar" style="display:none;">
+            <h2>RECUPERAR</h2>
+            <p style="font-size: 14px; margin-bottom: 15px;">Enviaremos as instruções para seu e-mail.</p>
+            <input type="email" id="emailRecuperar" placeholder="Digite seu e-mail">
+            <button onclick="recuperarSenha()">ENVIAR ACESSO</button>
+            <a onclick="mostrarBox('login')">Voltar para o Login</a>
+        </div>
+
+        <div class="login-box" id="boxCadastroAluno" style="display:none;">
+            <h2>NOVA CONTA ALUNO</h2>
+            <input type="text" id="nomeAluno" placeholder="Nome Completo">
+            <input type="email" id="emailAluno" placeholder="E-mail Institucional">
+            <input type="password" id="senhaAluno" placeholder="Crie uma senha">
+            <button onclick="cadastrarAluno()">CRIAR CADASTRO</button>
+            <a onclick="mostrarBox('login')">Já sou cadastrado</a>
+        </div>
+
+        <div class="login-box" id="boxCadastroEmpresa" style="display:none;">
+            <h2>CADASTRO EMPRESA</h2>
+            <input type="text" id="nomeEmpresaCadastro" placeholder="Nome da Instituição">
+            <input type="email" id="emailEmpresa" placeholder="E-mail Corporativo">
+            <input type="password" id="senhaEmpresa" placeholder="Crie uma senha">
+            <button onclick="cadastrarEmpresa()">REGISTRAR EMPRESA</button>
+            <a onclick="mostrarBox('login')">Voltar</a>
+        </div>
+    </div>
+</div>
+
+<div class="sistema" id="sistema">
+    <div class="tela" id="vagas">
+        <div class="header-section">
+            <h2>Vagas Disponíveis</h2>
+            <button class="btn-main" onclick="logout()" style="background:#666">Sair</button>
+        </div>
+        <div id="listaVagas"></div>
+    </div>
+
+    <div class="tela" id="dashboard">
+        <div class="header-section">
+            <h2>Painel da Empresa</h2>
+            <div>
+                <button class="btn-main" onclick="abrirCadastroVaga()">+ Nova Vaga</button>
+                <button class="btn-main" onclick="logout()" style="background:#666">Sair</button>
+            </div>
+        </div>
+        <div id="listaDashboard"></div>
+    </div>
+
+    <div class="tela" id="cadastroVaga">
+        <h2>Anunciar Nova Oportunidade</h2>
+        <div style="background: white; padding: 30px; border-radius: 15px; margin-top:20px;">
+            <input id="cursoInput" placeholder="Curso" style="width:100%; padding:10px; margin-bottom:10px;">
+            <input id="cidadeInput" placeholder="Cidade" style="width:100%; padding:10px; margin-bottom:10px;">
+            <input id="periodoInput" placeholder="Período" style="width:100%; padding:10px; margin-bottom:10px;">
+            <input id="tipoInput" placeholder="Tipo (Presencial, Remoto ou Híbrido)" style="width:100%; padding:10px; margin-bottom:10px;">
+            <input id="remuneracaoInput" placeholder="Remuneração" style="width:100%; padding:10px; margin-bottom:10px;">
+            <button class="btn-main" onclick="salvarVaga()">Publicar</button>
+            <button class="btn-main" style="background:#ccc; color:#333" onclick="mostrarTela('dashboard')">Cancelar</button>
+        </div>
+    </div>
+
+    <div class="tela" id="listaCandidatosTela">
+        <h2>Candidatos Interessados</h2>
+        <div id="listaCandidatos" style="margin-top:20px"></div>
+        <button class="btn-main" onclick="mostrarTela('dashboard')">Voltar</button>
+    </div>
+</div>
+
+<script>
+// USUÁRIOS COM DADOS DE EXEMPLO
+let usuarios = [
+    {email:"aluno@gmail.com", senha:"1234", tipo:"aluno", nome:"João Silva"},
+    {email:"maria@gmail.com", senha:"1234", tipo:"aluno", nome:"Maria Oliveira"},
+    {email:"pedro@gmail.com", senha:"1234", tipo:"aluno", nome:"Pedro Santos"},
+    {email:"empresa@gmail.com", senha:"1234", tipo:"empresa", nomeEmpresa:"Tec Arinos"}
+];
+
+// VAGAS COM CANDIDATOS DE EXEMPLO PARA A TEC ARINOS
+let vagas = [
+    {curso:"Sistemas de Informação", empresa:"Tec Arinos", cidade:"Arinos-MG", periodo:"4º ao 6º Período", tipo:"Híbrido", remunerado:"R$ 1.500,00", candidatos:["aluno@gmail.com", "maria@gmail.com"]},
+    {curso:"Administração", empresa:"Tec Arinos", cidade:"Arinos-MG", periodo:"Indiferente", tipo:"Presencial", remunerado:"R$ 800,00", candidatos:["pedro@gmail.com"]},
+    {curso:"Agronomia", empresa:"BR Agro", cidade:"Buritis - MG", periodo:"2º ao 4º Período", tipo:"Presencial", remunerado:"Não", candidatos:[]}
+];
+
+let usuarioLogado = null;
+let indiceEdicao = null;
+
+function mostrarBox(tipo){
+    document.querySelectorAll('.login-box').forEach(b => b.style.display = 'none');
+    if(tipo==='login') boxLogin.style.display="block";
+    if(tipo==='recuperar') boxRecuperar.style.display="block";
+}
+
+function mostrarCadastro(tipo){
+    document.querySelectorAll('.login-box').forEach(b => b.style.display = 'none');
+    if(tipo==='aluno') boxCadastroAluno.style.display="block";
+    if(tipo==='empresa') boxCadastroEmpresa.style.display="block";
+}
+
+function mostrarTela(id){
+    document.querySelectorAll(".tela").forEach(t => t.style.display="none");
+    document.getElementById(id).style.display="block";
+}
+
+function fazerLogin(){
+    const usuario = usuarios.find(u => u.email === emailLogin.value && u.senha === senhaLogin.value);
+    if(!usuario){ alert("E-mail ou senha incorretos."); return; }
+    usuarioLogado = usuario;
+    loginScreen.style.display = "none";
+    sistema.style.display = "block";
+    usuario.tipo === "aluno" ? (mostrarTela("vagas"), carregarVagas()) : (mostrarTela("dashboard"), carregarDashboard());
+}
+
+function logout(){
+    usuarioLogado = null;
+    loginScreen.style.display = "flex";
+    sistema.style.display = "none";
+}
+
+function carregarVagas(){
+    listaVagas.innerHTML = "";
+    vagas.forEach((v, i) => {
+        listaVagas.innerHTML += `
+        <div class="card">
+            <h3>${v.curso}</h3>
+            <p><b> Empresa:</b> ${v.empresa}</p>
+            <p><b> Local:</b> ${v.cidade}</p>
+            <p><b> Período:</b> ${v.periodo}</p>
+            <p><b> Tipo:</b> ${v.tipo}</p>
+            <p><b> Bolsa:</b> ${v.remunerado}</p>
+            <button onclick="candidatar(${i})">Candidatar-se</button>
+        </div>`;
+    });
+}
+
+function carregarDashboard(){
+    listaDashboard.innerHTML = "";
+    vagas.forEach((v, i) => {
+        if(v.empresa === usuarioLogado.nomeEmpresa){
+            listaDashboard.innerHTML += `
+            <div class="card">
+                <h3>${v.curso}</h3>
+                <p><b> Tipo:</b> ${v.tipo}</p>
+                <p><b> Candidatos:</b> ${v.candidatos.length}</p>
+                <button onclick="verCandidatos(${i})">Ver Interessados</button>
+                <button onclick="editarVaga(${i})" style="border-color:#f39c12; color:#f39c12">Editar</button>
+                <button onclick="excluirVaga(${i})" style="border-color:#e74c3c; color:#e74c3c">Remover</button>
+            </div>`;
+        }
+    });
+}
+
+function salvarVaga(){
+    const novaVaga = {
+        curso: cursoInput.value,
+        empresa: usuarioLogado.nomeEmpresa,
+        cidade: cidadeInput.value,
+        periodo: periodoInput.value,
+        tipo: tipoInput.value,
+        remunerado: remuneracaoInput.value,
+        candidatos: indiceEdicao !== null ? vagas[indiceEdicao].candidatos : []
+    };
+    if(indiceEdicao !== null) vagas[indiceEdicao] = novaVaga;
+    else vagas.push(novaVaga);
+    indiceEdicao = null;
+    mostrarTela('dashboard');
+    carregarDashboard();
+}
+
+function candidatar(i){
+    if(vagas[i].candidatos.includes(usuarioLogado.email)) return alert("Já candidatado!");
+    vagas[i].candidatos.push(usuarioLogado.email);
+    alert("Candidatura enviada!");
+}
+
+function verCandidatos(i){
+    listaCandidatos.innerHTML = "";
+    vagas[i].candidatos.forEach(email => {
+        let aluno = usuarios.find(u => u.email === email);
+        listaCandidatos.innerHTML += `<div class="card" style="width:100%; margin-bottom:10px"><b>${aluno.nome}</b> (${aluno.email})</div>`;
+    });
+    mostrarTela("listaCandidatosTela");
+}
+
+function editarVaga(i){
+    indiceEdicao = i;
+    const v = vagas[i];
+    cursoInput.value = v.curso; cidadeInput.value = v.cidade; periodoInput.value = v.periodo;
+    tipoInput.value = v.tipo; remuneracaoInput.value = v.remunerado;
+    mostrarTela("cadastroVaga");
+}
+
+function excluirVaga(i){ if(confirm("Remover vaga?")) { vagas.splice(i,1); carregarDashboard(); } }
+
+function cadastrarAluno(){
+    usuarios.push({email:emailAluno.value, senha:senhaAluno.value, tipo:"aluno", nome:nomeAluno.value});
+    alert("Cadastrado!"); mostrarBox('login');
+}
+
+function cadastrarEmpresa(){
+    usuarios.push({email:emailEmpresa.value, senha:senhaEmpresa.value, tipo:"empresa", nomeEmpresa:nomeEmpresaCadastro.value});
+    alert("Empresa cadastrada!"); mostrarBox('login');
+}
+
+function abrirCadastroVaga(){
+    indiceEdicao = null;
+    cursoInput.value=""; cidadeInput.value=""; periodoInput.value=""; tipoInput.value=""; remuneracaoInput.value="";
+    mostrarTela("cadastroVaga");
+}
+
+function recuperarSenha(){
+    const u = usuarios.find(u => u.email === emailRecuperar.value);
+    u ? alert("Sua senha é: " + u.senha) : alert("Não encontrado.");
+    mostrarBox('login');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+aluno@gmail.com senha:1234 
+empresa@gmail.com senha:1234
